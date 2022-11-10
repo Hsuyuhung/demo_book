@@ -5,41 +5,59 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Entity
 @Table(name = "book")
 public class Book {
 
 	@Id
 	@Column(name = "ISBN")
-	private int ISBN;
-	
+	private String ISBN;
+
 	@Column(name = "name")
 	private String name;
-	
+
 	@Column(name = "author")
 	private String author;
-	
+
 	@Column(name = "category")
 	private String category;
-	
+
 	@Column(name = "price")
-	private int price;
-	
+	private Integer price;
+
 	@Column(name = "purchase")
-	private int purchase;
-	
+	private Integer purchase;
+
 	@Column(name = "sales")
-	private int sales;
-	
+	private Integer sales;
+
 	public Book() {
-		
+
 	}
 
-	public int getISBN() {
+	public Book(String ISBN, String name, String author, String category, Integer price, Integer purchase, Integer sales) {
+		this.ISBN = ISBN;
+		this.name = name;
+		this.author = author;
+		this.category = category;
+		this.price = price;
+		this.purchase = purchase;
+		this.sales = sales;
+	}
+
+	public Book(String ISBN, Integer sales) {
+		this.ISBN = ISBN;
+		this.sales = sales;
+	}
+
+	public String getISBN() {
 		return ISBN;
 	}
 
-	public void setISBN(int iSBN) {
+	public void setISBN(String iSBN) {
 		ISBN = iSBN;
 	}
 
@@ -67,28 +85,28 @@ public class Book {
 		this.category = category;
 	}
 
-	public int getPrice() {
+	public Integer getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
-		this.price = price;
-	}
-
-	public int getPurchase() {
+	public Integer getPurchase() {
 		return purchase;
 	}
 
-	public void setPurchase(int purchase) {
+	public void setPurchase(Integer purchase) {
 		this.purchase = purchase;
 	}
 
-	public int getSales() {
+	public Integer getSales() {
 		return sales;
 	}
 
-	public void setSales(int sales) {
+	public void setSales(Integer sales) {
 		this.sales = sales;
 	}
-	
+
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
+
 }
