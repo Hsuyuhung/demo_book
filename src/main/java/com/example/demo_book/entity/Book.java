@@ -32,13 +32,14 @@ public class Book {
 	private Integer purchase;
 
 	@Column(name = "sales")
-	private Integer sales;
+	private Integer sales = 0;
 
 	public Book() {
 
 	}
 
-	public Book(String ISBN, String name, String author, String category, Integer price, Integer purchase, Integer sales) {
+	public Book(String ISBN, String name, String author, String category, Integer price, Integer purchase,
+			Integer sales) {
 		this.ISBN = ISBN;
 		this.name = name;
 		this.author = author;
@@ -46,6 +47,24 @@ public class Book {
 		this.price = price;
 		this.purchase = purchase;
 		this.sales = sales;
+	}
+
+	public Book(String name, String author, String category, Integer price, Integer purchase, Integer sales) {
+		this.name = name;
+		this.author = author;
+		this.category = category;
+		this.price = price;
+		this.purchase = purchase;
+		this.sales = sales;
+	}
+
+	public Book(String ISBN, String name, String author, String category, Integer price, Integer purchase) {
+		this.ISBN = ISBN;
+		this.name = name;
+		this.author = author;
+		this.category = category;
+		this.price = price;
+		this.purchase = purchase;
 	}
 
 	public Book(String ISBN, Integer sales) {
@@ -108,5 +127,4 @@ public class Book {
 	public void setPrice(Integer price) {
 		this.price = price;
 	}
-
 }

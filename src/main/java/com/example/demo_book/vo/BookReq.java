@@ -8,13 +8,13 @@ public class BookReq {
 
 	@JsonProperty(value = "ISBN")
 	private String ISBN;
-
 	private String name;
 	private String author;
 	private String category;
 	private int price;
 	private int purchase;
 	private int sales;
+	private String password;
 	private Map<String, Integer> buyBook;
 
 	public BookReq() {
@@ -87,6 +87,14 @@ public class BookReq {
 		this.sales = sales;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public Map<String, Integer> getBuyBook() {
 		return buyBook;
 	}
@@ -94,5 +102,4 @@ public class BookReq {
 	public void setBuyBook(Map<String, Integer> buyBook) {
 		this.buyBook = buyBook;
 	}
-
 }

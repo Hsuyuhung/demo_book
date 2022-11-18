@@ -1,22 +1,18 @@
 package com.example.demo_book.vo;
 
-public class ConsumerBuyBook {
+public class ConsumerReceiptInfo {
 
 	private String name;
-
 	private String ISBN;
-
 	private String author;
-
 	private Integer price;
-
 	private Integer quantity;
 
-	public ConsumerBuyBook() {
+	public ConsumerReceiptInfo() {
 
 	}
 
-	public ConsumerBuyBook(String name, String ISBN, String author, Integer price, Integer quantity) {
+	public ConsumerReceiptInfo(String name, String ISBN, String author, Integer price, Integer quantity) {
 		this.name = name;
 		this.ISBN = ISBN;
 		this.author = author;
@@ -63,5 +59,4 @@ public class ConsumerBuyBook {
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
-
 }

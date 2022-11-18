@@ -11,15 +11,21 @@ public class BookRes {
 
 	@JsonProperty(value = "book_info")
 	private Book book;
+
 	private String message;
+
 	@JsonProperty(value = "book_list_info")
 	private List<Book> bookList;
+
 	@JsonProperty(value = "store_book_list_info")
 	private List<Book> storeBookList;
+
 	@JsonProperty(value = "consumer_book_list_info")
 	private List<Book> consumerBookList;
-	@JsonProperty(value = "receipt_info")
-	private List<ConsumerBuyBook> consumerReceipt;
+
+	@JsonProperty(value = "consumer_receipt")
+	private List<ConsumerReceiptInfo> consumerReceipt;
+
 	private Integer totalPrice;
 
 	public BookRes() {
@@ -35,8 +41,8 @@ public class BookRes {
 		this.message = message;
 	}
 
-	public BookRes(List<Book> storeBookList, String message) {
-		this.storeBookList = storeBookList;
+	public BookRes(List<Book> bookList, String message) {
+		this.bookList = bookList;
 		this.message = message;
 	}
 
@@ -60,15 +66,19 @@ public class BookRes {
 		this.message = message;
 	}
 
-	public List<Book> getStoreBookList() {
-		return storeBookList;
-	}
-
 	public List<Book> getBookList() {
 		return bookList;
 	}
 
-	public void setBookList(List<Book> storeBookList) {
+	public void setBookList(List<Book> bookList) {
+		this.bookList = bookList;
+	}
+
+	public List<Book> getStoreBookList() {
+		return storeBookList;
+	}
+
+	public void setStoreBookList(List<Book> storeBookList) {
 		this.storeBookList = storeBookList;
 	}
 
@@ -80,15 +90,11 @@ public class BookRes {
 		this.consumerBookList = consumerBookList;
 	}
 
-	public void setStoreBookList(List<Book> storeBookList) {
-		this.storeBookList = storeBookList;
-	}
-
-	public List<ConsumerBuyBook> getConsumerReceipt() {
+	public List<ConsumerReceiptInfo> getConsumerReceipt() {
 		return consumerReceipt;
 	}
 
-	public void setConsumerReceipt(List<ConsumerBuyBook> consumerReceipt) {
+	public void setConsumerReceipt(List<ConsumerReceiptInfo> consumerReceipt) {
 		this.consumerReceipt = consumerReceipt;
 	}
 
@@ -99,5 +105,4 @@ public class BookRes {
 	public void setTotalPrice(Integer totalPrice) {
 		this.totalPrice = totalPrice;
 	}
-
 }

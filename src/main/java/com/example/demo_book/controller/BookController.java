@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo_book.constants.BookRtnCode;
+import com.example.demo_book.constants.BookMessageCode;
 import com.example.demo_book.entity.Book;
 import com.example.demo_book.service.ifs.BookService;
 import com.example.demo_book.vo.BookReq;
@@ -23,54 +23,69 @@ public class BookController {
 	@PostMapping(value = "api/new_release")
 	public BookRes newRelease(@RequestBody BookReq req) {
 
-		switch (req.getISBN().length()) {
-		case 10:
-			break;
+		if (!StringUtils.hasText(req.getISBN()) || !StringUtils.hasText(req.getName())
+				|| !StringUtils.hasText(req.getAuthor()) || !StringUtils.hasText(req.getCategory())) {
+			return new BookRes(BookMessageCode.ITEM_EMPTY.getMessage());
+		}
 
+		switch (req.getISBN().length()) {
+
+		case 10:
 		case 13:
 			break;
 
 		default:
-			return new BookRes(BookRtnCode.ISBN_WRONG.getMessage());
+			return new BookRes(BookMessageCode.ISBN_LENGTH.getMessage());
 		}
 
-		if (!StringUtils.hasText(req.getISBN()) || !StringUtils.hasText(req.getName())
-				|| !StringUtils.hasText(req.getAuthor()) || !StringUtils.hasText(req.getCategory())) {
-			return new BookRes(BookRtnCode.ITEM_EMPTY.getMessage());
-		}
-
-		if (req.getPrice() == 0) {
-			return new BookRes(BookRtnCode.ITEM_EMPTY.getMessage());
-		}
-
-		if (req.getSales() != 0) {
-			return new BookRes(BookRtnCode.SALE_INITIAL.getMessage());
+		if (req.getPrice() <= 0 || req.getPurchase() <= 0) {
+			return new BookRes(BookMessageCode.ITEM_EMPTY.getMessage());
 		}
 
 		Book book = bookService.newRelease(req.getISBN(), req.getName(), req.getAuthor(), req.getCategory(),
-				req.getPrice(), req.getPurchase(), req.getSales());
+				req.getPrice(), req.getPurchase());
 
 		if (book == null) {
-			return new BookRes(BookRtnCode.ISBN_EXISTED.getMessage());
+			return new BookRes(BookMessageCode.ISBN_EXISTED.getMessage());
 		}
 
-		return new BookRes(book, BookRtnCode.SUCCESSFUL.getMessage());
+		return new BookRes(book, BookMessageCode.SUCCESSFUL.getMessage());
+	}
 
+	@PostMapping(value = "api/update_book_info")
+	public BookRes updateBookInfo(@RequestBody BookReq req) {
+
+		if (!StringUtils.hasText(req.getISBN())) {
+			return new BookRes(BookMessageCode.ITEM_EMPTY.getMessage());
+		}
+
+		if (!StringUtils.hasText(req.getName()) && !StringUtils.hasText(req.getName())
+				&& !StringUtils.hasText(req.getAuthor()) && !StringUtils.hasText(req.getCategory())
+				&& req.getPrice() == 0 && req.getPurchase() == 0 && req.getSales() == 0) {
+			return new BookRes(BookMessageCode.ITEM_EMPTY.getMessage());
+		}
+
+		if (req.getPrice() < 0 || req.getPurchase() < 0 || req.getSales() < 0) {
+			return new BookRes(BookMessageCode.NUMBER_ERRO.getMessage());
+		}
+
+		return bookService.updateBookInfo(req.getISBN(), req.getName(), req.getAuthor(), req.getCategory(),
+				req.getPrice(), req.getPurchase(), req.getSales());
 	}
 
 	@PostMapping(value = "api/search_category")
 	public BookRes searchCategory(@RequestBody BookReq req) {
 
 		if (!StringUtils.hasText(req.getCategory())) {
-			return new BookRes(BookRtnCode.ITEM_EMPTY.getMessage());
+			return new BookRes(BookMessageCode.ITEM_EMPTY.getMessage());
 		}
 
-		List<Book> listBook = bookService.searchCategory(req.getCategory());
-		if(listBook == null) {
-			return new BookRes(BookRtnCode.NO_RESULT.getMessage());
+		List<Book> bookList = bookService.searchCategory(req.getCategory());
+		if (bookList == null) {
+			return new BookRes(BookMessageCode.NO_RESULT.getMessage());
 		}
-		
-		return new BookRes(listBook, BookRtnCode.SUCCESSFUL.getMessage());
+
+		return new BookRes(bookList, BookMessageCode.SUCCESSFUL.getMessage());
 	}
 
 	@PostMapping(value = "api/find_by_ISBN_Name_Author")
@@ -78,60 +93,71 @@ public class BookController {
 
 		if (!StringUtils.hasText(req.getISBN()) && !StringUtils.hasText(req.getName())
 				&& !StringUtils.hasText(req.getAuthor())) {
-			// »Á›î»Î3ÇÄŸY¡œΩ‘ûÈø’
-			return new BookRes(BookRtnCode.ITEM_EMPTY.getMessage());
+			return new BookRes(BookMessageCode.ITEM_EMPTY.getMessage());
 		}
 
-		BookRes listBook = bookService.getBookInfoByISBNOrNameOrAuthor(req.getISBN(), req.getName(),
+		BookRes listBook = bookService.getBookInfoByISBNOrNameOrAuthor(req.getPassword(), req.getISBN(), req.getName(),
 				req.getAuthor());
 		if (listBook == null) {
-			// »Á≤ÈüoΩYπ˚
-			return new BookRes(BookRtnCode.NO_RESULT.getMessage());
+			// Ô†±ËÑ§Ó∂≠Á£êÂΩÜ
+			return new BookRes(BookMessageCode.NO_RESULT.getMessage());
 		}
 
-		return bookService.getBookInfoByISBNOrNameOrAuthor(req.getISBN(), req.getName(), req.getAuthor());
+		return bookService.getBookInfoByISBNOrNameOrAuthor(req.getPassword(), req.getISBN(), req.getName(),
+				req.getAuthor());
 	}
 
 	@PostMapping(value = "api/update_purchase")
 	public BookRes updatePurchase(@RequestBody BookReq req) {
 
 		if (!StringUtils.hasText(req.getISBN())) {
-			return new BookRes(BookRtnCode.ITEM_EMPTY.getMessage());
+			return new BookRes(BookMessageCode.ITEM_EMPTY.getMessage());
 		}
-		
+
+		if (req.getPurchase() < 0) {
+			return new BookRes(BookMessageCode.ITEM_EMPTY.getMessage());
+		}
+
 		Book book = bookService.updatePurchase(req.getISBN(), req.getPurchase());
 		if (book == null) {
-			return new BookRes(BookRtnCode.ISBN_WRONG.getMessage());
+			return new BookRes(BookMessageCode.ISBN_NULL.getMessage());
 		}
-		return new BookRes(book, BookRtnCode.SUCCESSFUL.getMessage());
+
+		return new BookRes(book, BookMessageCode.SUCCESSFUL.getMessage());
 	}
 
 	@PostMapping(value = "api/update_price")
 	public BookRes updatePrice(@RequestBody BookReq req) {
 
 		if (!StringUtils.hasText(req.getISBN())) {
-			return new BookRes(BookRtnCode.ITEM_EMPTY.getMessage());
+			return new BookRes(BookMessageCode.ITEM_EMPTY.getMessage());
 		}
-		if (req.getPrice() == 0) {
-			return new BookRes(BookRtnCode.ITEM_EMPTY.getMessage());
+
+		if (req.getPrice() < 0) {
+			return new BookRes(BookMessageCode.ITEM_EMPTY.getMessage());
 		}
 
 		Book book = bookService.updatePrice(req.getISBN(), req.getPrice());
 		if (book == null) {
-			return new BookRes(BookRtnCode.ISBN_WRONG.getMessage());
+			return new BookRes(BookMessageCode.ISBN_NULL.getMessage());
 		}
-		return new BookRes(book, BookRtnCode.SUCCESSFUL.getMessage());
+
+		return new BookRes(book, BookMessageCode.SUCCESSFUL.getMessage());
 	}
 
 	@PostMapping(value = "/api/sales")
 	public BookRes sales(@RequestBody BookReq req) {
+
+		if (req.getBuyBook().isEmpty()) {
+			return new BookRes(BookMessageCode.ITEM_EMPTY.getMessage());
+		}
 
 		return bookService.sales(req.getBuyBook());
 	}
 
 	@PostMapping(value = "api/best_seller")
 	public List<Book> bestSeller() {
-		return bookService.bestSeller();
 
+		return bookService.bestSeller();
 	}
 }

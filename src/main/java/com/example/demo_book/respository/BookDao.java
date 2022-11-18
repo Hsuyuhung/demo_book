@@ -9,11 +9,10 @@ import com.example.demo_book.entity.Book;
 
 @Repository
 public interface BookDao extends JpaRepository<Book, String> {
-	
-	List<Book> findByCategoryContaining(String category);
+
+	List<Book> findByCategoryContaining(String categorySet);
 
 	List<Book> findByISBNOrNameOrAuthor(String ISBN, String name, String author);
 
 	List<Book> findTop5ByOrderBySalesDesc();
-
 }
