@@ -2,11 +2,20 @@ package com.example.demo_book.constants;
 
 public enum BookMessageCode {
 
-	SUCCESSFUL("200", "Success"), ISBN_EXISTED("400", "ISBN is existed!!"), ISBN_WRONG("400", "ISBN is wrong!!"),
-	ISBN_LENGTH("400", "ISBN length is wrong!!"), ISBN_NULL("400", "ISBN is null!!"),
-	ITEM_EMPTY("400", "Item is empty!!"), SALE_INITIAL("400", "Initial sales volume must be 0!!"),
-	NUMBER_ERRO("400", "Must not be less than 0!!"), NO_RESULT("400", "No result!!"),
-	NO_STOCK("400", "Inventory shortage!!");
+	CREATE_INFO_SUCCESSFUL("200", "創建成功。"),
+	SEARCH_SUCCESSFUL("200", "搜尋成功。"),
+	UPDATE_SUCCESSFUL("200", "更新成功。"),
+	SALE_SUCCESSFUL("200", "感謝您的購買。"),
+	ISBN_EXISTED("400", "ISBN已存在。"), 
+	ISBN_WRONG("400", "ISBN錯誤。"),
+	ISBN_LENGTH("400", "ISBN長度錯誤。"), 
+	ISBN_NULL("400", "查無此ISBN。"),
+	ITEM_EMPTY("400", "項目不得為空。"), 
+	ITEM_WRONG("400", "請輸入欲變更項目。"),
+	SALE_INITIAL("400", "初始銷售數量需為0。"),
+	NUMBER_ERRO("400", "數字不得小於0。"), 
+	NO_RESULT("400", "查無結果。"),
+	NO_STOCK("400", "庫存短缺。");
 
 	private String code;
 	private String message;
